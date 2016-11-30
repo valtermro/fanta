@@ -47,17 +47,35 @@ const eslint = (file, fail) => function eslint() {
 }
 
 const writeIndex = () => function writeIndex(done) {
-  const contents = fs.readdirSync('./src')
-    .filter(f => f[0] !== '_' && f.slice(-8) !== '_test.js')
-    .reduce((a, f) => {
-      if (f !== 'index.js')
-        a += `export { default as ${f.slice(0, -3)} } from './${f}'\n` // eslint-disable-line
-      return a
-    }, '')
+  const write = (d) => {
+    const dir = pathFromRoot(d)
+    const contents = fs.readdirSync(dir)
+      .filter(f => f[0] !== '_' && f.slice(-8) !== '_test.js')
+      .reduce((a, f) => {
+        if (f !== 'index.js' && f.slice(-3) === '.js')
+          a += `export { default as ${f.slice(0, -3)} } from './${f}'\n` // eslint-disable-line
+        return a
+      }, '')
 
-  fs.writeFileSync('./src/index.js', contents)
+    fs.writeFileSync(path.join(dir, 'index.js'), contents)
+  }
+
+  write('src')
+  write('src/util')
 
   if (done) done()
+}
+
+const readDir = (dir) => {
+  return fs.readdirSync(dir)
+    .filter(f => f[0] !== '_')
+    .map((f) => {
+      const file = path.join(dir, f)
+      if (f.slice(-3) === '.js')
+        return file
+      return readDir(file)
+    })
+    .reduce((a, f) => a.concat(f), [])
 }
 
 gulp.task('mocha', mocha('all', false))
@@ -81,33 +99,33 @@ gulp.task('clear', function clear(done) {
 gulp.task('dev', gulp.series(
   writeIndex(),
   function watching() {
-    const old = fs.readdirSync('./src')
+    const old = readDir('./src')
 
     return gulp.watch('./src/**/*.js')
-      .on('change', (f) => {
-        const file = path.basename(f)
-        if (file === 'index.js') return
+      .on('change', (file) => {
+        const basename = path.basename(file)
+        if (basename === 'index.js') return
 
         // run the tests for this file
-        const testFile = f.slice(-8) === '_test.js' ? f :
-          f.replace(file.slice(-3), '_test.js')
+        const testFile = file.slice(-8) === '_test.js' ? file :
+          file.replace(basename.slice(-3), '_test.js')
         const testPath = pathFromRoot(testFile)
 
         if (fs.existsSync(testPath)) {
           console.log('Running tests for', testPath)
           mocha(testPath, false)()
         }
-        eslint(pathFromRoot(f), false)()
+        eslint(pathFromRoot(file), false)()
 
         // Update index.js
-        if (f[0] !== '_' && old.indexOf(file) < 0) {
+        if (file[0] !== '_' && old.indexOf(file) < 0) {
           old.push(file)
           writeIndex()()
         }
       })
-      .on('unlink', (f) => {
-        const file = path.basename(f)
-        if (file === 'index.js') return
+      .on('unlink', (file) => {
+        const basename = path.basename(file)
+        if (basename === 'index.js') return
 
         // Update index.js
         const oldi = old.indexOf(file)
