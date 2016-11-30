@@ -7,6 +7,7 @@ import util from '../../_dev/util'
 describe('Maybe.Just', () => {
   const just = new Just(2)
   const unchanged = () => A.equal(just._value, 2)
+  const fJust = new Just(util.double)
 
   it('reports the right type', () => {
     A.equal(just['@@type'], 'fanta/Maybe')
@@ -39,23 +40,19 @@ describe('Maybe.Just', () => {
   }
 
   describe('.ap(b)', () => {
-    const f = new Just(util.double)
-    const applied = f.ap(just)
-
     it('applies the function in this container to the value in "b"', () => {
+      const applied = fJust.ap(just)
       A.equal(applied._value, 4)
-      A.equal(f._value, util.double)
+      A.equal(fJust._value, util.double)
       unchanged()
     })
   })
 
   describe('[fantasy-land/ap](b)', () => {
-    const f = new Just(util.double)
-    const applied = just[fl.ap](f)
-
     it('applies the function in "b" to the value in this container', () => {
+      const applied = just[fl.ap](fJust)
       A.equal(applied._value, 4)
-      A.equal(f._value, util.double)
+      A.equal(fJust._value, util.double)
       unchanged()
     })
   })

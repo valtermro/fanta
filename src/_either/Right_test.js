@@ -7,6 +7,7 @@ import util from '../../_dev/util'
 describe('Either.Right', () => {
   const right = new Right(2)
   const unchanged = () => A.equal(right._value, 2)
+  const fRight = new Right(util.double)
 
   it('reports the right type', () => {
     A.equal(right['@@type'], 'fanta/Either')
@@ -39,23 +40,19 @@ describe('Either.Right', () => {
   }
 
   describe('.ap(b)', () => {
-    const f = new Right(util.double)
-    const applied = f.ap(right)
-
     it('applies the function in this container to the value in "b"', () => {
+      const applied = fRight.ap(right)
       A.equal(applied._value, 4)
-      A.equal(f._value, util.double)
+      A.equal(fRight._value, util.double)
       unchanged()
     })
   })
 
   describe('[fantasy-land/ap](b)', () => {
-    const f = new Right(util.double)
-    const applied = right[fl.ap](f)
-
     it('applies the function in "b" to the value in this container', () => {
+      const applied = right[fl.ap](fRight)
       A.equal(applied._value, 4)
-      A.equal(f._value, util.double)
+      A.equal(fRight._value, util.double)
       unchanged()
     })
   })

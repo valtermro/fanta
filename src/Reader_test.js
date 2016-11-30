@@ -1,22 +1,30 @@
 /* eslint-env mocha */
 import A from 'assert'
 import fl from 'fantasy-land'
-import IO from './IO'
+import Reader from './Reader'
 import util from '../_dev/util'
 import fantasyLaws from '../_dev/fantasy-laws'
 
-describe('IO', () => {
-  const io = IO(() => 2)
-  const unchanged = () => A.equal(io.run(), 2)
-  const fIO = IO(() => util.double)
+describe('Reader', () => {
+  const reader = Reader(util.double)
+  const unchanged = () => A.equal(reader._value, util.double)
+  const dob = () => util.double
+  const fReader = Reader(dob)
 
   it('reports the right type', () => {
-    A.equal(io['@@type'], 'fanta/IO')
+    A.equal(reader['@@type'], 'fanta/Reader')
   })
 
-  describe('.run()', () => {
-    it('dispatches the IO', () => {
-      A.equal(IO(() => 2).run(), 2)
+  describe('.ask', () => {
+    it('is a `Reader` of `indentity`', () => {
+      A.equal(Reader.ask.run(10), 10)
+      A.equal(Reader.ask.map(util.double).run(10), 20)
+    })
+  })
+
+  describe('.run(ctx)', () => {
+    it('dispatches the Reader with "ctx"', () => {
+      A.equal(reader.run(2), 4)
     })
   })
 
@@ -25,8 +33,8 @@ describe('IO', () => {
 
   function testOf(of) {
     return function () {
-      it('lifts "v" into an `IO`', () => {
-        A.equal(IO[of](2).run(), 2)
+      it('lifts "v" into an `Reader`', () => {
+        A.equal(Reader[of](2).run(), 2)
       })
     }
   }
@@ -35,11 +43,11 @@ describe('IO', () => {
   describe('[fantasy-land/map](f)', testMap(fl.map))
 
   function testMap(map) {
-    const mapped = io[map](util.double)
+    const mapped = reader[map](util.double)
 
     return function () {
       it('applies "f" to the value in the container', () => {
-        A.equal(mapped.run(), 4)
+        A.equal(mapped.run(2), 8)
         unchanged()
       })
     }
@@ -47,18 +55,18 @@ describe('IO', () => {
 
   describe('.ap(b)', () => {
     it('applies the function in this container to the value in "b"', () => {
-      const applied = fIO.ap(io)
-      A.equal(applied.run(), 4)
-      A.equal(fIO.run(), util.double)
+      const applied = fReader.ap(reader)
+      A.equal(applied.run(3), 12)
+      A.equal(fReader._value, dob)
       unchanged()
     })
   })
 
   describe('[fantasy-land/ap](v)', () => {
     it('applies the function in "b" to the value in this container', () => {
-      const applied = io[fl.ap](fIO)
-      A.equal(applied.run(), 4)
-      A.equal(fIO.run(), util.double)
+      const applied = reader[fl.ap](fReader)
+      A.equal(applied.run(4), 16)
+      A.equal(fReader._value, dob)
       unchanged()
     })
   })
@@ -67,11 +75,13 @@ describe('IO', () => {
   describe('[fantasy-land/chain](f)', testChain(fl.chain))
 
   function testChain(chain) {
-    const chained = io[chain](v => IO(() => util.double(v)))
+    // Should pass the context to every Reader in the chain
+    const fn = v => Reader(x => x).map(x => x * v)
+    const chained = reader[chain](fn)
 
     return function () {
       it('applies "f" to the value in the container and flattens the result', () => {
-        A.equal(chained.run(), 4)
+        A.equal(chained.run(3), 18)
         unchanged()
       })
     }
@@ -81,19 +91,19 @@ describe('IO', () => {
   describe('.inspect()', testToString('inspect'))
 
   function testToString(tostring) {
-    const io2 = IO(function () { return 'foo' }) // eslint-disable-line
+    const reader2 = Reader(function () { return 'foo' }) // eslint-disable-line
 
     return function () {
       it('returns the string representation of the container', () => {
-        const matched = !!io2[tostring]()
-          .match(/IO\(function\s\(\)\s{\n?\s+return\s['"]foo['"].+\n?.+}\)/)
+        const matched = !!reader2[tostring]()
+          .match(/Reader\(function\s\(\)\s{\n?\s+return\s['"]foo['"].+\n?.+}\)/)
         A.equal(matched, true)
       })
     }
   }
 
   describe('interfaces', () => {
-    const laws = fantasyLaws(IO, (a, b) => a.run() === b.run())
+    const laws = fantasyLaws(Reader, (a, b) => a.run() === b.run())
 
     it('Functor', () => laws.functor())
     it('Apply', () => laws.apply())

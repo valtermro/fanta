@@ -5,7 +5,7 @@ const A = require('assert')
 module.exports = function laws(T, eq) {
   const assert = (l, a, b) => {
     if (!eq(a, b))
-      A.equal(1, 2, l)
+      A.fail(a, b, l)
   }
 
   return {
