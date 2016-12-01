@@ -16,15 +16,15 @@ const shared = {
     'transform-es2015-template-literals',
     'transform-es2015-unicode-regex',
   ],
-}
+};
 
 module.exports.node = {
   plugins: shared.plugins.concat([
     'transform-es2015-modules-commonjs',
     'add-module-exports',
   ]),
-}
+};
 
 module.exports.next = {
   plugins: shared.plugins.concat([/* */]),
-}
+};

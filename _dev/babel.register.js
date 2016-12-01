@@ -1,3 +1,3 @@
-const babelConfig = require('./babel.config.js')
+const babelConfig = require('./babel.config.js');
 
-require('babel-core/register')(babelConfig.node)
+require('babel-core/register')(babelConfig.node);

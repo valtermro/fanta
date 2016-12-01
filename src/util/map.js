@@ -1,7 +1,7 @@
-import fl from 'fantasy-land'
+import fl from 'fantasy-land';
 
 export default function map(fn) {
   return function (functor) {
-    return functor[fl.map](fn)
-  }
+    return functor[fl.map](fn);
+  };
 }

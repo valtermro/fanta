@@ -1,42 +1,42 @@
-import fl from 'fantasy-land'
-import ignored from '../_internal/ignored'
+import fl from 'fantasy-land';
+import ignored from '../_internal/ignored';
 
 export default function Right(value) {
-  this._value = value
+  this._value = value;
 }
 
-Right.prototype['@@type'] = 'fanta/Either'
-Right.prototype.isLeft = false
-Right.prototype.isRight = true
+Right.prototype['@@type'] = 'fanta/Either';
+Right.prototype.isLeft = false;
+Right.prototype.isRight = true;
 
 Right.prototype.map = function map(f) {
-  return new Right(f(this._value))
-}
+  return new Right(f(this._value));
+};
 
 Right.prototype.ap = function ap(b) {
-  return b.map(this._value)
-}
+  return b.map(this._value);
+};
 
 Right.prototype.chain = function chain(f) {
-  return new Right(f(this._value)._value)
-}
+  return new Right(f(this._value)._value);
+};
 
 Right.prototype.getOrElse = function getOrElse(_) {
-  return this._value
-}
+  return this._value;
+};
 
-Right.prototype.orElse = ignored
+Right.prototype.orElse = ignored;
 
 Right.prototype.toString = function toString() {
-  return `Either.Right(${this._value})`
-}
+  return `Either.Right(${this._value})`;
+};
 
-Right.prototype.inspect = Right.prototype.toString
+Right.prototype.inspect = Right.prototype.toString;
 
 // fantasy-land compatibility
-Right.prototype[fl.map] = Right.prototype.map
-Right.prototype[fl.chain] = Right.prototype.chain
+Right.prototype[fl.map] = Right.prototype.map;
+Right.prototype[fl.chain] = Right.prototype.chain;
 
 Right.prototype[fl.ap] = function ap(b) {
-  return this.map(b._value)
-}
+  return this.map(b._value);
+};
