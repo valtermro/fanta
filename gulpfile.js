@@ -53,7 +53,7 @@ const writeIndex = () => function writeIndex(done) {
       .filter(f => f[0] !== '_' && f.slice(-8) !== '_test.js')
       .reduce((a, f) => {
         if (f !== 'index.js' && f.slice(-3) === '.js')
-          a += `export { default as ${f.slice(0, -3)} } from './${f}'\n` // eslint-disable-line
+          a += `export { default as ${f.slice(0, -3)} } from './${f}';\n` // eslint-disable-line
         return a;
       }, '');
 
