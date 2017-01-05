@@ -3,7 +3,7 @@
 ## Usage
 Install it using npm.  
 ```
-npm Install [--save] fanta
+npm install [--save] fanta
 ```
 There is no such a thing as "dist" files, you'll need to use a module bundler to
 use it on the browser.
