@@ -57,16 +57,20 @@ describe('Either.Left', () => {
   describe('.inspect()', testToString('inspect'));
 
   function testToString(m) {
-    const assert = (value) => {
-      A.equal(new Left(value)[m](), `Either.Left(${value})`);
+    const assert = (value, wanted) => {
+      A.equal(new Left(value)[m](), `Either.Left(${wanted})`);
     };
 
     return function () {
       it('returns the string representation of the container', () => {
-        assert(3);
-        assert('foo');
-        assert(false);
-        assert(null);
+        assert(3, '3');
+        assert('foo', '"foo"');
+        assert(false, 'false');
+        assert(null, 'null');
+
+        const matched = !!(new Left(function foo() { return 'foo'; }))[m]()
+          .match(/Either.Left\(function foo\(\)\s{\n?\s+return\s['"]foo['"].+\n?.+}\)/);
+        A.equal(matched, true);
       });
     };
   }

@@ -1,4 +1,5 @@
 import fl from 'fantasy-land';
+import _toString from 'tolb/util/toString';
 import ignored from '../_internal/ignored';
 
 export default function Just(v) {
@@ -29,7 +30,7 @@ Just.prototype.getOrElse = function getOrElse(_) {
 };
 
 Just.prototype.toString = function toString() {
-  return `Maybe.Just(${this._value})`;
+  return `Maybe.Just(${_toString(this._value)})`;
 };
 
 Just.prototype.inspect = Just.prototype.toString;

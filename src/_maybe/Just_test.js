@@ -91,16 +91,20 @@ describe('Maybe.Just', () => {
   describe('.inspect()', testToString('inspect'));
 
   function testToString(m) {
-    const assert = (value) => {
-      A.equal(new Just(value)[m](), `Maybe.Just(${value})`);
+    const assert = (value, wanted) => {
+      A.equal(new Just(value)[m](), `Maybe.Just(${wanted})`);
     };
 
     return function () {
       it('returns the string representation of the container', () => {
-        assert(3);
-        assert('foo');
-        assert(false);
-        assert(null);
+        assert(3, '3');
+        assert('foo', '"foo"');
+        assert(false, 'false');
+        assert(null, 'null');
+
+        const matched = !!(new Just(function foo() { return 'foo'; }))[m]()
+          .match(/Maybe.Just\(function foo\(\)\s{\n?\s+return\s['"]foo['"].+\n?.+}\)/);
+        A.equal(matched, true);
       });
     };
   }

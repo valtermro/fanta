@@ -1,4 +1,5 @@
 import fl from 'fantasy-land';
+import _toString from 'tolb/util/toString';
 import ignored from '../_internal/ignored';
 
 export default function Right(value) {
@@ -28,7 +29,7 @@ Right.prototype.getOrElse = function getOrElse(_) {
 Right.prototype.orElse = ignored;
 
 Right.prototype.toString = function toString() {
-  return `Either.Right(${this._value})`;
+  return `Either.Right(${_toString(this._value)})`;
 };
 
 Right.prototype.inspect = Right.prototype.toString;
