@@ -1,6 +1,6 @@
 {
   "name": "fanta",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Yet another set of algebraic structures implementing the fantasy-land spec",
   "main": "index.js",
   "scripts": {
