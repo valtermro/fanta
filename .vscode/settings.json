@@ -1,0 +1,6 @@
+{
+  "editor.rulers": [80, 100],
+
+  // eslint, please
+  "javascript.validate.enable": false
+}
