@@ -86,6 +86,7 @@ gulp.task('bundle-next', bundle('next'));
 gulp.task('bundle', gulp.parallel('bundle-node', 'bundle-next'));
 
 gulp.task('test', gulp.parallel(eslint('all', true), mocha('all', true)));
+gulp.task('test-bundle', mocha('./_dev/bundle_test.js', true));
 gulp.task('build', gulp.series('test', writeIndex(), 'bundle'));
 
 gulp.task('clear', function clear(done) {

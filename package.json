@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "gulp test",
-    "prepublish": "gulp build",
+    "prepublish": "gulp clear && gulp build && gulp test-bundle",
     "postpublish": "gulp clear"
   },
   "repository": {
@@ -51,7 +51,8 @@
     "gulp-load-plugins": "^1.4.0",
     "gulp-mocha": "^3.0.1",
     "gulp-util": "^3.0.7",
-    "rmdir": "^1.2.0"
+    "rmdir": "^1.2.0",
+    "tolb": "^0.7.3"
   },
   "dependencies": {
     "fantasy-land": "^2.1.0"

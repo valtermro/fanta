@@ -20,8 +20,8 @@ const shared = {
 
 module.exports.node = {
   plugins: shared.plugins.concat([
-    'transform-es2015-modules-commonjs',
     'add-module-exports',
+    'transform-es2015-modules-commonjs',
   ]),
 };
 
