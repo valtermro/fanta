@@ -10,19 +10,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vtfn/fanta.git"
+    "url": "git+https://github.com/valtermro/fanta.git"
   },
   "bugs": {
-    "url": "https://github.com/vtfn/fanta/issues"
+    "url": "https://github.com/valtermro/fanta/issues"
   },
-  "homepage": "https://github.com/vtfn/fanta#readme",
+  "homepage": "https://github.com/valtermro/fanta#readme",
   "keywords": [
     "functional programming",
     "fantasy-land",
     "fp",
     "algebraic"
   ],
-  "author": "vtfn <vtfn@outlook.com>",
+  "author": "valtermro <valtermro@outlook.com>",
   "license": "MIT",
   "devDependencies": {
     "babel": "^6.5.2",
