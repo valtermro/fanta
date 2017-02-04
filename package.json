@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "gulp test",
-    "prepublish": "gulp clear && gulp build && gulp test-bundle",
-    "postpublish": "gulp clear"
+    "prepublish": "gulp clean && gulp build && gulp test-bundle",
+    "postpublish": "gulp clean"
   },
   "repository": {
     "type": "git",

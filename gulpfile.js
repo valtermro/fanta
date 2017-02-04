@@ -89,7 +89,7 @@ gulp.task('test', gulp.parallel(eslint('all', true), mocha('all', true)));
 gulp.task('test-bundle', mocha('./_dev/bundle_test.js', true));
 gulp.task('build', gulp.series('test', writeIndex(), 'bundle'));
 
-gulp.task('clear', function clear(done) {
+gulp.task('clean', function clean(done) {
   fs.readdirSync('./')
     .filter(p => !p.match(/^\..+|.+\.(json|md)|^[A-Z]+$|_dev|src|node_modules|gulpfile/))
     .map(pathFromRoot)
